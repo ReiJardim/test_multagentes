@@ -24,9 +24,8 @@ class ProjetoTest():
 
     @task
     def research_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['research_task'],
-        )
+        return Task(config=self.tasks_config['research_task'],
+                    )
 
     @task
     def reporting_task(self) -> Task:

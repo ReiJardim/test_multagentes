@@ -1,0 +1,35 @@
+
+pesquisa_automatizada:
+  description: >
+    Realizar uma pesquisa abrangente que coleta dados e informações relevantes sobre gestão de resíduos, incluindo legislações, melhores práticas e estudos de caso. Utilizar algoritmos de busca semântica para garantir a precisão e a relevância dos dados.
+  expected_output: >
+    Relatório inicial contendo uma lista de fontes de informação relevantes, dados coletados e seu formato (ex.: artigos, legislações, etc.) prontos para análise.
+  agent: pesquisador_automatizado
+
+analise_de_conteudo:
+  description: >
+    Analisar os dados coletados na tarefa anterior, identificando e destacando pontos críticos e tópicos relevantes para o desenvolvimento do PGRS. Classificar as informações em categorias para facilitar o entendimento.
+  expected_output: >
+    Resumo analítico com as principais informações e tópicos abordados, estruturado em categorias, que servirão de base para o escopo do conteúdo.
+  agent: analista_de_conteudo
+
+desenvolvimento_de_escopo:
+  description: >
+    Usar as informações analisadas para criar um escopo detalhado que delineie claramente os objetivos, ações, e etapas do Plano de Gestão de Resíduos. O escopo deve ser definido em concordância com as melhores práticas do setor e requisitos legais.
+  expected_output: >
+    Documento de escopo do PGRS, contendo objetivos, ações necessárias e cronograma de desenvolvimento das etapas.
+  agent: desenvolvedor_de_escopo
+
+geracao_de_documentacao:
+  description: >
+    Redigir a documentação do PGRS utilizando inteligência artificial, assegurando que todos os conteúdos atendam aos padrões estabelecidos e requisitos legais. Incluir seções obrigatórias como introdução, metodologia, análise de riscos e recomendações.
+  expected_output: >
+    Rascunho completo da documentação do PGRS em formato digital, pronta para revisão.
+  agent: redator_de_documentacao
+
+revisao_colaborativa:
+  description: >
+    Facilitar uma revisão colaborativa da documentação do PGRS, permitindo que todos os membros da equipe revisem e editem o conteúdo em tempo real. Incorporar feedback e atualizações necessárias até que o documento esteja coeso e adequado.
+  expected_output: >
+    Documento final revisado e aprovado do PGRS, pronto para apresentação a órgãos reguladores.
+  agent: revisor

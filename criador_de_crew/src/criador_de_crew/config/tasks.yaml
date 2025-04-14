@@ -1,0 +1,167 @@
+# tasks.yaml
+# Definição das tarefas para o processo de criação de um sistema CrewAI
+
+
+definicao_conceito_sistema:
+  description: >
+    Analisar a ideia inicial para o sistema multi-agente e articular 
+    claramente o objetivo principal que ele deve alcançar, o escopo 
+    de suas funcionalidades, e quaisquer restrições ou requisitos gerais.
+    Sistema a ser criado é: {definicao_do_sistema_alvo}
+  expected_output: >
+    Um documento de conceito detalhado (ou um resumo claro) descrevendo 
+    o propósito e os limites do {definicao_do_sistema_alvo}.
+  agent: arquiteto_solucoes
+
+design_agentes_sistema_alvo:
+  description: >
+    Com base no documento de conceito (resultado da tarefa definicao_conceito_sistema), 
+    identificar e detalhar todos os agentes que farão parte do {definicao_do_sistema_alvo}. 
+    Especificar `role`, `goal` e `backstory` para cada um, e opcionalmente `tools` e 
+    `allow_delegation`.
+  expected_output: >
+    Uma lista estruturada contendo as definições completas de cada agente 
+    proposto para a "crew" final.
+  agent: designer_agentes
+
+design_tarefas_sistema_alvo:
+  description: >
+    Baseado no conceito (tarefa definicao_conceito_sistema) e nos agentes 
+    definidos (tarefa design_agentes_sistema_alvo), decompor o objetivo 
+    geral do sistema final em tarefas específicas. Para cada tarefa, 
+    detalhar a `description`, o `expected_output` e atribuir o `agent` 
+    responsável pela sua execução no {definicao_do_sistema_alvo}. Considerar as 
+    dependências entre tarefas.
+  expected_output: >
+    Uma lista estruturada contendo as definições completas de cada tarefa 
+    para a "crew" final, incluindo o agente responsável.
+  agent: designer_tarefas
+
+criacao_arquivo_agents_yaml:
+  description: >
+    Utilizar a lista de definições de agentes (resultado da tarefa 
+    design_agentes_sistema_alvo) para gerar o arquivo `agents.yaml`. 
+    Validar a sintaxe YAML e garantir que todos os campos necessários 
+    (`role`, `goal`, `backstory`, etc.) estejam corretamente formatados.
+  expected_output: >
+    Um arquivo `agents.yaml` válido e bem formatado contendo as definições 
+    de todos os agentes para o sistema final.
+
+    o arquivo deve ter a seguinte formatação:
+
+    ```yaml
+    nome_do_agente_em_snake_case:
+      role: >
+        Role aqui
+      goal: >
+        Goal aqui
+      backstory: >
+        Backstory aqui
+    ```
+
+
+  agent: engenheiro_configuracao_yaml
+
+criacao_arquivo_tasks_yaml:
+  description: >
+    Utilizar a lista de definições de tarefas (resultado da tarefa 
+    design_tarefas_sistema_alvo) para gerar o arquivo `tasks.yaml`. 
+    Validar a sintaxe YAML, verificar se os nomes dos agentes 
+    referenciados correspondem aos definidos no `agents.yaml` e 
+    garantir que todos os campos (`description`, `expected_output`, `agent`) 
+    estejam presentes.
+  expected_output: >
+    Um arquivo `tasks.yaml` válido e bem formatado contendo as definições 
+    de todas as tarefas para o sistema final.
+
+    o arquivo deve ter a seguinte formatação:
+    ```yaml
+    nome_da_task_em_snake_case:
+      description: >
+        Descrição aqui
+      expected_output: >
+        Saida esperada aqui
+      agent: nome_do_agente_em_snake_case
+    ```
+
+
+  agent: engenheiro_configuracao_yaml
+
+definicao_fluxo_orquestracao:
+  description: >
+    Analisar a lista de tarefas do sistema final (definida no arquivo tasks.yaml 
+    criado na tarefa criacao_arquivo_tasks_yaml) e suas dependências para 
+    determinar o fluxo de trabalho ideal. Escolher o `Process` CrewAI mais 
+    adequado (ex: `Sequential`, `Hierarchical`) e definir a ordem ou lógica 
+    de execução das tarefas.
+  expected_output: >
+    Uma especificação clara do processo da `Crew` (tipo e ordem/lógica das 
+    tarefas) a ser implementada no script `crew.py` do {definicao_do_sistema_alvo}.
+  agent: desenvolvedor_orquestrador_crewai
+
+implementacao_script_crew_py:
+  description: >
+    Criar o script `crew.py` para o sistema final. Implementar a lógica 
+    para carregar os agentes do `agents.yaml` e as tarefas do `tasks.yaml` 
+    (criados nas tarefas criacao_arquivo_agents_yaml e criacao_arquivo_tasks_yaml). 
+    Instanciar a `Crew` com os agentes, tarefas e o processo definido na 
+    tarefa definicao_fluxo_orquestracao. Incluir o comando `kickoff()` 
+    para iniciar a execução e preparar o tratamento do resultado final.
+  expected_output: >
+    Um script Python (`crew.py`) funcional que orquestra a execução da 
+    "crew" definida nos arquivos YAML, completando o desenvolvimento do 
+    {definicao_do_sistema_alvo}.
+
+    o arquivo deve ter a seguinte formatação:
+    ```python
+    from crewai import Agent, Crew, Process, Task
+    from crewai.project import CrewBase, agent, crew, task
+
+
+    @CrewBase
+    class ProjetoTest():
+
+        agents_config = 'config/agents.yaml'
+        tasks_config = 'config/tasks.yaml'
+
+        @agent
+        def researcher(self) -> Agent:
+            return Agent(
+                config=self.agents_config['researcher'],
+                verbose=True
+            )
+
+        @agent
+        def reporting_analyst(self) -> Agent:
+            return Agent(
+                config=self.agents_config['reporting_analyst'],
+                verbose=True
+            )
+
+        @task
+        def research_task(self) -> Task:
+            return Task(
+                config=self.tasks_config['research_task'],
+            )
+
+        @task
+        def reporting_task(self) -> Task:
+            return Task(
+                config=self.tasks_config['reporting_task'],
+                output_file='report.md'
+            )
+
+        @crew
+        def crew(self) -> Crew:
+
+            return Crew(
+                agents=self.agents,  # Automatically created by the @agent decorator
+                tasks=self.tasks,  # Automatically created by the @task decorator
+                process=Process.sequential,
+                verbose=True,
+                
+            )
+
+    ```
+
+  agent: desenvolvedor_orquestrador_crewai
